@@ -29,6 +29,12 @@ namespace Voxel_Engine {
             meshFilter = GetComponent<MeshFilter>();
         }
 
+        public void SetBlock(Vector3Int blockCoord, BlockState blockState) {
+            if (InBound(blockCoord.x, blockCoord.y, blockCoord.z)) {
+                blocks[blockCoord.x, blockCoord.y, blockCoord.z] = blockState;
+            }
+        }
+
         public bool InBound(int x, int y, int z) {
             return x >= 0 && x < Width && y >= 0 && y < Height && z >= 0 && z < Depth;
         }
@@ -60,12 +66,7 @@ namespace Voxel_Engine {
                         Vector3Int blockPos = new Vector3Int(x, y, z);
                         Color blockColor = BlockStateColor.GetColor(block);
                         if (block != BlockState.None) {
-                            // BlockState upBlock = blocks[x, y + 1, z];
-                            // if (upBlock == BlockState.None) {
-                            //     triangles.AddRange(BlockFace.GetTrisIndex(vertices.Count));
-                            //     vertices.AddRange(BlockFace.GetUpperVertices(blockPos));
-                            // }
-
+                            
                             for (int i = 0; i < BlockFace.directions.Length; i++) {
                                 Vector3Int direction = BlockFace.directions[i];
                                 if (GetBlock(blockPos + direction) == BlockState.None) {
@@ -92,17 +93,18 @@ namespace Voxel_Engine {
 
         public void Start() {
             Init(BlockState.None);
-            
-            blocks[0, 0, 0] = BlockState.Stone;
-            blocks[0, 1, 0] = BlockState.Stone;
+            GenerateBlocks();
+            ConstructMesh();
+        }
+
+        public void GenerateBlocks() {
             for (int x = 0; x < Width; x++) {
-                for (int y = 0; y < Height; y++) {
-                    for (int z = 0; z < Depth; z++) {
-                        Debug.Log("vec3(" + new Vector3(x,y,z) + ") block: " + blocks[x,y,z]);
+                for (int z = 0; z < Depth; z++) {
+                    for (int y = 0; y < 4; y++) {
+                        blocks[x, y, z] = (BlockState)Random.Range(1,4);
                     }
                 }
             }
-            ConstructMesh();
         }
         
     }

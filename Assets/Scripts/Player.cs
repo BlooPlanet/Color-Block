@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Voxel_Engine;
 
 public class Player : MonoBehaviour {
 
@@ -26,6 +27,19 @@ public class Player : MonoBehaviour {
     void Update() {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        
+        RaycastHit hit;
+        if (Physics.Raycast(cameraT.position, cameraT.forward, out hit)) {
+            if (Input.GetMouseButtonDown(0)) {
+                Chunk chunk = hit.transform.gameObject.GetComponent<Chunk>();
+                if (chunk != null) {
+                    Vector3 insidePos = hit.point + hit.normal * -0.1f;
+                    Vector3Int blockCoord = Vector3Int.FloorToInt(insidePos);
+                    chunk.SetBlock(blockCoord, BlockState.None);
+                    chunk.ConstructMesh();
+                }
+            }
+        }
         
         UpdateMovement();
         UpdateCameraMovement();
@@ -85,4 +99,6 @@ public class Player : MonoBehaviour {
             lastJumpTime = Time.time;
         }
     }
+    
+    
 }
