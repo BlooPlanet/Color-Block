@@ -16,7 +16,7 @@ public class Player : MonoBehaviour {
     float gravity;
     float gravityScale = -9.8f;
 
-    float sensitivity = 2f;
+    float sensitivity = 3f;
 
     void Start() {
         controller = GetComponent<CharacterController>();
@@ -71,6 +71,7 @@ public class Player : MonoBehaviour {
         
         transform.Rotate(Vector3.up * mouseX);
         mouseRotationY += mouseY;
+        mouseRotationY = Mathf.Clamp(mouseRotationY, -90, 90);
         cameraT.localEulerAngles = new Vector3(-mouseRotationY, cameraT.localEulerAngles.y, 0);
     }
 

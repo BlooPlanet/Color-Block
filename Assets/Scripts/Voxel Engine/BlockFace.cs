@@ -50,5 +50,33 @@ namespace Voxel_Engine {
                 1 + v, 2 + v, 3 + v
             };
         }
+
+        public static Vector3Int[] directions = new[] {
+            Vector3Int.up,
+            Vector3Int.down,
+            Vector3Int.forward,
+            Vector3Int.back,
+            Vector3Int.right,
+            Vector3Int.left
+        };
+
+        public static Vector3[] GetVertices(int i,Vector3 blockPos) {
+            switch (i) {
+                case 0:
+                    return GetUpperVertices(blockPos);
+                case 1:
+                    return GetDownVertices(blockPos);
+                case 2:
+                    return GetFrontVertices(blockPos);  
+                case 3:
+                    return GetBackVertices(blockPos);
+                case 4:
+                    return GetRightVertices(blockPos);
+                case 5:
+                    return GetLeftVertices(blockPos);
+                default:
+                    return null;
+            }
+        }
     }
 }
