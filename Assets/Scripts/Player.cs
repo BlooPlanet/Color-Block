@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Voxel_Engine;
+using Random = UnityEngine.Random;
 
 public class Player : MonoBehaviour {
 
@@ -20,6 +21,7 @@ public class Player : MonoBehaviour {
     float sensitivity = 3f;
 
     void Start() {
+        transform.position = new Vector3((16 * 16) / 2, 19, (16 * 16) / 2);
         controller = GetComponent<CharacterController>();
         moveSpeed = walkSpeed;
     }
@@ -34,8 +36,18 @@ public class Player : MonoBehaviour {
                 Chunk chunk = hit.transform.gameObject.GetComponent<Chunk>();
                 if (chunk != null) {
                     Vector3 insidePos = hit.point + hit.normal * -0.1f;
-                    Vector3Int blockCoord = Vector3Int.FloorToInt(insidePos);
+                    Vector3Int blockCoord = Vector3Int.FloorToInt(insidePos - chunk.transform.position);
                     chunk.SetBlock(blockCoord, BlockState.None);
+                    chunk.ConstructMesh();
+                }
+            }
+            
+            if (Input.GetMouseButtonDown(1)) {
+                Chunk chunk = hit.transform.gameObject.GetComponent<Chunk>();
+                if (chunk != null) {
+                    Vector3 insidePos = hit.point + hit.normal * 0.1f;
+                    Vector3Int blockCoord = Vector3Int.FloorToInt(insidePos - chunk.transform.position);
+                    chunk.SetBlock(blockCoord, (BlockState)Random.Range(1,4));
                     chunk.ConstructMesh();
                 }
             }

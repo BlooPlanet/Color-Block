@@ -27,6 +27,7 @@ namespace Voxel_Engine {
 
             meshCollider = GetComponent<MeshCollider>();
             meshFilter = GetComponent<MeshFilter>();
+            GetComponent<MeshRenderer>().material = mat;
         }
 
         public void SetBlock(Vector3Int blockCoord, BlockState blockState) {
@@ -91,16 +92,16 @@ namespace Voxel_Engine {
             meshCollider.sharedMesh = mesh;
         }
 
-        public void Start() {
-            Init(BlockState.None);
-            GenerateBlocks();
-            ConstructMesh();
-        }
+        // public void Start() {
+        //     Init(BlockState.None);
+        //     GenerateBlocks();
+        //     ConstructMesh();
+        // }
 
         public void GenerateBlocks() {
             for (int x = 0; x < Width; x++) {
                 for (int z = 0; z < Depth; z++) {
-                    for (int y = 0; y < 4; y++) {
+                    for (int y = 0; y < 16; y++) {
                         blocks[x, y, z] = (BlockState)Random.Range(1,4);
                     }
                 }
